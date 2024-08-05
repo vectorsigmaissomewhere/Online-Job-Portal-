@@ -15,6 +15,7 @@
     "@emotion/styled": "^11.13.0",
     "@mui/icons-material": "^5.16.6",
     "@mui/material": "^5.16.6",
+    "@mui/styles": "^5.16.6",
     "autoprefixer": "^10.4.19",
     "framer-motion": "^11.3.19",
     "postcss": "^8.4.40",
