@@ -163,7 +163,7 @@ const SavedJobs = () => (
 );
 
 const Profile = () => (
-  <div>
-    <h1>This is the Profile component</h1>
-  </div>
+  <>
+  <h1>This is our profile section</h1>
+  </>
 );
