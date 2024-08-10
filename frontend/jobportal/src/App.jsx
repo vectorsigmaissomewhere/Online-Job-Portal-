@@ -4,6 +4,7 @@ import Signup from './components/auth/Signup';
 import './index.css'
 import Header from './components/common/Header';
 import UserProfile from './components/profile/UserProfile';
+import Logout from './components/auth/Logout';
 
 function App() {
   return (
@@ -13,6 +14,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/signup' element={<Signup />} />
         <Route path='/userprofile' element={<UserProfile />} />
+        <Route path='logout' element={<Logout />} />
       </Routes>
     </Router>
   )

@@ -18,8 +18,12 @@ import MailIcon from '@mui/icons-material/Mail';
 import Container from '@mui/material/Container';
 import Button from '@mui/material/Button';
 import { Unstable_Popup as BasePopup} from '@mui/base/Unstable_Popup';
-import { styled } from '@mui/system';
+import { display, styled } from '@mui/system';
 import { TextField } from '@mui/material';
+import axios from 'axios';
+import Logout from '../auth/Logout';
+
+
 
 const drawerWidth = 240;
 
@@ -52,6 +56,9 @@ function UserProfile(props) {
         <ListItemButton onClick={() => setProfileComponent(3)}>
           <Person2Icon />
           <ListItemText primary="Profile" />
+        </ListItemButton>
+        <ListItemButton>
+          <Logout />
         </ListItemButton>
       </List>
       <Divider />
@@ -241,95 +248,141 @@ const EditProfile = () => (
   </>
 );
 
-
 const PasswordPopup = () => {
-  const [anchor, setAnchor] = React.useState(null);
-  const [oldPassword, setOldPassword] = React.useState('');
-  const [newPassword, setNewPassword] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [password2, setPassword2] = React.useState('');
+  const [message, setMessage] = React.useState('');
+  const [errors, setErrors] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
+  const [open, setOpen] = React.useState(false);
 
-  const handleClick = (event) => {
-    setAnchor(anchor ? null : event.currentTarget);
+  const id = 'password-popup';
+  const anchor = null;
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    setLoading(true);
+
+    if (password !== password2) {
+      setMessage('Passwords do not match.');
+      setLoading(false);
+      return;
+    }
+
+    const passwordData = { password, password2 };
+
+    axios.post('http://127.0.0.1:8000/api/user/changepassword/', passwordData, {
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem('accessToken')}`
+      }
+    })
+      .then(response => {
+        setPassword('');
+        setPassword2('');
+        setMessage(response.data.msg || 'Password changed successfully!');
+        setErrors({});
+      })
+      .catch(error => {
+        console.error('Error changing password:', error);
+        setMessage('Failed to change password. Please try again.');
+        if (error.response && error.response.data) {
+          setErrors(error.response.data);
+        }
+      })
+      .finally(() => {
+        setLoading(false);
+      });
   };
-  const open = Boolean(anchor);
-  const id = open ? 'simple-popper' : undefined;
-  {/*handle submit to print on the console */}
 
-  const handleResetPassSubmit = (event) => {
-    event.preventDefault();
-    console.log('Old Password');
-    console.log('New Password');
-  } 
-
-  return(
+  return (
     <div>
-      <PasswordChangeButton aria-describedby={id} type='button' onClick={handleClick}>
+      <PasswordChangeButton aria-describedby={id} type='button' onClick={() => setOpen(!open)}>
         Reset Password
       </PasswordChangeButton>
       <BasePopup id={id} open={open} anchor={anchor}>
-      <PopupBody>
-        <form>
-          <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap : '10px'
-          }}
-          >
-          <Typography 
-          sx={{
-            mr: '0px',
-            pt: '30px',
-            width: '80%'
-          }}
-          >Enter Old Password</Typography>
-          <TextField
-            label="Old Password"
-            value={oldPassword}
-            onChange={(e) => setOldPassword(e.target.value)}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-      />
-          </Box>
-          <Box
-          sx={{
-            display: 'flex',
-            flexDirection: 'row',
-            gap : '10px'
-          }}
-          >
-          <Typography
-          sx={{
-            mr: '0px',
-            pt: '30px',
-            width: '80%'
-          }}
-          >Enter New Password</Typography>
-          <TextField
-            label="New Password"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            variant="outlined"
-            fullWidth
-            margin="normal"
-            type="password"
-           />
-          </Box>
-          <Box
-          sx={{
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
-          }}
-          >
-          <Button>Submit</Button>
-          </Box>
-        </form>
-      </PopupBody>
+        <PopupBody
+        sx={{
+          display: 'flex',
+
+        }}
+        >
+          <form onSubmit={handleSubmit}>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '10px'
+              }}
+            >
+              <Typography 
+                sx={{
+                  mr: '0px',
+                  pt: '30px',
+                  width: '80%'
+                }}
+              >
+                Enter New Password
+              </Typography>
+              <TextField
+                label="New Passwod"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                type="password"
+              />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'row',
+                gap: '10px'
+              }}
+            >
+              <Typography
+                sx={{
+                  mr: '0px',
+                  pt: '30px',
+                  width: '80%'
+                }}
+              >
+                Re-type Password
+              </Typography>
+              <TextField
+                label="Re-Type Passwod"
+                value={password2}
+                onChange={(e) => setPassword2(e.target.value)}
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                type="password"
+              />
+            </Box>
+            <Box
+              sx={{
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center'
+              }}
+            >
+              <Button type="submit" disabled={loading}>
+                {loading ? 'Submitting...' : 'Submit'}
+              </Button>
+            </Box>
+            {message && (
+              <Box sx={{ mt: 2, textAlign: 'center' }}>
+                <Typography color={errors ? 'error' : 'primary'}>
+                  {message}
+                </Typography>
+              </Box>
+            )}
+          </form>
+        </PopupBody>
       </BasePopup>
     </div>
-  )
-}
+  );
+};
 
 const grey = {
   50: '#F3F6F9',

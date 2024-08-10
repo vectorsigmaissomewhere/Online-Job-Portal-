@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import Box from '@mui/material/Box';
-import { Checkbox, TextField } from '@mui/material';
+import { Checkbox, Link, TextField } from '@mui/material';
 import Button from '@mui/material/Button';
 import FormGroup from '@mui/material/FormGroup';
 import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -166,15 +168,26 @@ const Signup = () => {
               mt: '20px'
             }}
           >
-            Don't have an account? Sign up
+            Already have an account? <Link to='/login' style={{ textDecoration: 'none', color: 'blue', cursor: 'pointer' }}>Login</Link>
           </Typography>
         </form>
-        {message && <p>{message}</p>}
-        {errors && <ul>
-          {Object.keys(errors).map((key, index) => (
-            <li key={index}>{`${key}: ${errors[key]}`}</li>
-          ))}
-        </ul>}
+        <Stack sx={{ width: '100%' }} spacing={2}>
+  {message && (
+    <Alert severity={message.includes('Successful') ? 'success' : 'error'}>
+      <p>{message}</p>
+    </Alert>
+  )}
+  {Object.keys(errors).length > 0 && (
+    <Alert severity="error">
+      <ul>
+        {Object.keys(errors).map((key, index) => (
+          <li key={index}>{`${key}: ${errors[key]}`}</li>
+        ))}
+      </ul>
+    </Alert>
+  )}
+</Stack>
+
       </Box>
     </Container>
   );
