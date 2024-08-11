@@ -300,12 +300,7 @@ const PasswordPopup = () => {
         Reset Password
       </PasswordChangeButton>
       <BasePopup id={id} open={open} anchor={anchor}>
-        <PopupBody
-        sx={{
-          display: 'flex',
-
-        }}
-        >
+        <PopupBody>
           <form onSubmit={handleSubmit}>
             <Box
               sx={{
