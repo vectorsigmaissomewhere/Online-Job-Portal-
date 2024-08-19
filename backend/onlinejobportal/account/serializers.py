@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from account.models import User
+from account.models import User, TestImage, TestDescription, ProfileDescription
 
 class UserRegistrationSerializer(serializers.ModelSerializer):
     # We are writing this because we need  confirm password field is in our Registration Request
@@ -43,3 +43,23 @@ class UserChangePasswordSerializer(serializers.Serializer):
         user.set_password(password)
         user.save()
         return attrs
+    
+class ImageTestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestImage
+        fields = ['image_url']
+
+class TestSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestDescription
+        fields = ['id', 'testname', 'testdescription']
+
+class ProfileDescriptionSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = ProfileDescription
+        fields = ['description', 'phonenumber', 'email', 'bio', 'profile_picture']
+
+    def create(self, validated_data):
+        user = self.context['request'].user
+        profile_description = ProfileDescription.objects.create(user=user, **validated_data)
+        return profile_description

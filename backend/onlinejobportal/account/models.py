@@ -1,5 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import BaseUserManager, AbstractBaseUser
+from django.core.exceptions import ValidationError
+from django.contrib.auth import get_user_model
 
 # Custom User Manager
 # BaseUserManager is a class that includes methods for creating User instances
@@ -78,3 +80,32 @@ class User(AbstractBaseUser):
         "Is the user a member of staff?"
         # Simplest possible answer: All admins are staff
         return self.is_admin
+    
+class TestImage(models.Model):
+    image_name = models.CharField(max_length=100, default='default_image_name')  # Provide a default value
+    image_url = models.ImageField(upload_to='testImage/')
+
+    def clean(self):
+        max_size = 5 * 1024 * 1024  # 5MB
+        if self.image_url.size > max_size:
+            raise ValidationError("Image file too large ( > 5MB )")
+
+class TestDescription(models.Model):
+    testname = models.CharField(max_length=100)
+    testdescription = models.CharField(max_length=100)
+
+class ProfileDescription(models.Model):
+    user = models.OneToOneField(get_user_model(), on_delete=models.CASCADE, related_name='profile_description')
+    description = models.TextField(blank=True, null=True)
+    phonenumber = models.TextField(blank=True, null=True)
+    email = models.TextField(blank=True, null=True)
+    bio = models.TextField(blank=True, null=True)
+    profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
+
+    def clean(self):
+        max_size = 5 * 1024 * 1024  # 5MB
+        if self.profile_picture and self.profile_picture.size > max_size:
+            raise ValidationError("Image file too large ( > 5MB )")
+    
+    def __str__(self):
+        return f"{self.user.email}'s Profile Description"

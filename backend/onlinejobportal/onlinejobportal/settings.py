@@ -29,6 +29,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'rest_framework',
     'account',
+    'corsheaders',
 ]
 
 MIDDLEWARE = [
@@ -158,11 +159,15 @@ SIMPLE_JWT = {
 
 # cors to avoid conflict with react js 
 CORS_ALLOWED_ORIGINS = [
-    'http://localhost:5173/', # front end url
+    'http://localhost:5173', # front end url
 ]
-
 
 # PASSWORD RESET TOKEN TIMEOUT
 PASSWORD_RESET_TIMEOUT = 900
 
 APPEND_SLASH=False
+
+
+# setting path for the image
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
