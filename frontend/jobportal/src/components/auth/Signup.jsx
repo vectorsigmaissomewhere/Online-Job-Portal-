@@ -1,14 +1,6 @@
 import React, { useState } from 'react';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import { Checkbox, Link, TextField } from '@mui/material';
-import Button from '@mui/material/Button';
-import FormGroup from '@mui/material/FormGroup';
-import FormControlLabel from '@mui/material/FormControlLabel';
 import axios from 'axios';
-import Alert from '@mui/material/Alert';
-import Stack from '@mui/material/Stack';
+import { Link } from 'react-router-dom';
 
 const Signup = () => {
   const [email, setEmail] = useState('');
@@ -55,141 +47,90 @@ const Signup = () => {
   };
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '68vh',
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: 'whitesmoke',
-          p: '80px',
-        }}
-      >
+    <div className="flex justify-center items-center h-[68vh]">
+      <div className="bg-gray-100 p-20 rounded shadow-lg">
         <form onSubmit={handleSubmit}>
-          <Typography
-            variant='h5'
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              mb: '30px',
-            }}
-          >
-            <b>Signup</b>
-          </Typography>
-          <Box>
-            <Typography>Email</Typography>
-            <TextField
-              sx={{ mb: '10px' }}
-              size='small'
-              label="Email"
+          <h5 className="text-center text-xl font-bold mb-8">Signup</h5>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email</label>
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+              type="email"
               value={email}
-              variant="outlined"
-              margin="normal"
               onChange={(e) => setEmail(e.target.value)}
             />
-          </Box>
-          <Box>
-            <Typography>Full Name</Typography>
-            <TextField
-              sx={{ mb: '10px' }}
-              size='small'
-              label="Full Name"
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Full Name</label>
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+              type="text"
               value={name}
-              variant="outlined"
-              margin="normal"
               onChange={(e) => setName(e.target.value)}
             />
-          </Box>
-          <Box>
-            <Typography>Password</Typography>
-            <TextField
-              size="small"
-              sx={{ mb: '10px' }}
-              label="Password"
-              value={password}
-              variant="outlined"
-              margin="normal"
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Password</label>
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
               type="password"
+              value={password}
               onChange={(e) => setPassword(e.target.value)}
             />
-          </Box>
-          <Box>
-            <Typography>Confirm Password</Typography>
-            <TextField
-              size="small"
-              sx={{ mb: '10px' }}
-              label="Confirm Password"
-              value={conPassword}
-              variant="outlined"
-              margin="normal"
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Confirm Password</label>
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
               type="password"
+              value={conPassword}
               onChange={(e) => setConPassword(e.target.value)}
             />
-          </Box>
-          <FormGroup>
-            <FormControlLabel
-              control={<Checkbox defaultChecked />}
-              label="Accept Terms and Conditions"
-              required
-              checked={tc}
-              onChange={(e) => setTc(!tc)}
-            />
-          </FormGroup>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Button
-              sx={{
-                backgroundColor: 'dodgerblue',
-                color: "white",
-                width: "18vw",
-                height: "6vh",
-                "&:hover": {
-                  bgcolor: "green",
-                },
-              }}
+          </div>
+          <div className="mb-4">
+            <label className="inline-flex items-center">
+              <input
+                type="checkbox"
+                className="form-checkbox"
+                checked={tc}
+                onChange={() => setTc(!tc)}
+              />
+              <span className="ml-2">Accept Terms and Conditions</span>
+            </label>
+          </div>
+          <div className="flex justify-center">
+            <button
+              className="bg-blue-500 text-white w-1/2 py-2 rounded hover:bg-green-500 transition duration-200"
               type="submit"
             >
               Submit
-            </Button>
-          </Box>
-          <Typography
-            sx={{
-              fontSize: '12px',
-              mt: '20px'
-            }}
-          >
-            Already have an account? <Link to='/login' style={{ textDecoration: 'none', color: 'blue', cursor: 'pointer' }}>Login</Link>
-          </Typography>
+            </button>
+          </div>
+          <p className="text-sm mt-4 text-center">
+            Already have an account?{' '}
+            <Link to='/login' className="text-blue-500 hover:underline">
+              Login
+            </Link>
+          </p>
         </form>
-        <Stack sx={{ width: '100%' }} spacing={2}>
-  {message && (
-    <Alert severity={message.includes('Successful') ? 'success' : 'error'}>
-      <p>{message}</p>
-    </Alert>
-  )}
-  {Object.keys(errors).length > 0 && (
-    <Alert severity="error">
-      <ul>
-        {Object.keys(errors).map((key, index) => (
-          <li key={index}>{`${key}: ${errors[key]}`}</li>
-        ))}
-      </ul>
-    </Alert>
-  )}
-</Stack>
-
-      </Box>
-    </Container>
+        <div className="mt-4">
+          {message && (
+            <div className={`p-4 mb-4 text-sm rounded ${message.includes('Successful') ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+              {message}
+            </div>
+          )}
+          {Object.keys(errors).length > 0 && (
+            <div className="p-4 mb-4 text-sm bg-red-100 text-red-700 rounded">
+              <ul>
+                {Object.keys(errors).map((key, index) => (
+                  <li key={index}>{`${key}: ${errors[key]}`}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+        </div>
+      </div>
+    </div>
   );
 };
 

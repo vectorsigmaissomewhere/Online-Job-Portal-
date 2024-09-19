@@ -8,6 +8,6 @@ urlpatterns = [
     path('changepassword/', UserChangePasswordView.as_view(), name='changpassword'),
     path('uploadImage/', TestImageAPI.as_view(), name='uploadImage'),
     path('testData/', TestData.as_view(), name='testData'),
-    path('profileDescription/', ProfileDescriptionView.as_view(), name='profileDescription'),
+    path('profileDescription/<int:pk>/', ProfileDescriptionView.as_view(), name='profileDescription'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

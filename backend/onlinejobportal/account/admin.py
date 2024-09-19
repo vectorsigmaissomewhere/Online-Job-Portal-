@@ -1,5 +1,5 @@
 from django.contrib import admin
-from account.models import User, TestImage, TestDescription
+from account.models import User, TestImage, TestDescription, ProfileDescription
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 
 class UserModelAdmin(BaseUserAdmin):
@@ -33,3 +33,4 @@ class UserModelAdmin(BaseUserAdmin):
 admin.site.register(User, UserModelAdmin)
 admin.site.register(TestImage)
 admin.site.register(TestDescription)
+admin.site.register(ProfileDescription)

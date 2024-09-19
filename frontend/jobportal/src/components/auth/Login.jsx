@@ -1,14 +1,9 @@
 import React, { useState } from 'react';
-import Typography from '@mui/material/Typography';
-import Container from '@mui/material/Container';
-import Box from '@mui/material/Box';
-import { TextField } from '@mui/material';
-import Button from '@mui/material/Button';
 import axios from 'axios';
-import { useNavigate, Link } from 'react-router-dom';  // Import Link
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = () => {
-  const [email,setEmail] = useState('');
+  const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [errors, setErrors] = useState({});
@@ -33,102 +28,57 @@ const Login = () => {
         navigate('/userprofile');
       })
       .catch(error => {
-        console.error('Error logging in:',  error);
+        console.error('Error logging in:', error);
         setMessage('Login failed. Please try again.');
-        if(error.response && error.response.data){
+        if (error.response && error.response.data) {
           setErrors(error.response.data);
         }
       });
   };
 
   return (
-    <Container
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '80vh',
-      }}
-    >
-      <Box
-        sx={{
-          backgroundColor: 'whitesmoke',
-          p: '80px',
-        }}
-      >
+    <div className="flex justify-center items-center h-[80vh]">
+      <div className="bg-gray-100 p-20 rounded shadow-lg">
         <form onSubmit={handleSubmit}>
-          <Typography
-            variant='h5'
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-              mb: '30px',
-            }}
-          >
-            <b>Login</b>
-          </Typography>
-          <Box>
-            <Typography>Email</Typography>
-            <TextField
-              sx={{ mb: '10px' }}
-              size='small'
-              label="Email"
+          <h5 className="text-center text-xl font-bold mb-8">Login</h5>
+          <div className="mb-4">
+            <label className="block text-gray-700">Email</label>
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+              type="email"
               id="email"
               value={email}
-              variant="outlined"
-              margin="normal"
               onChange={(e) => setEmail(e.target.value)}
             />
-          </Box>
-          <Box>
-            <Typography>Password</Typography>
-            <TextField
-              size="small"
-              sx={{ mb: '10px' }}
-              label="Password"
+          </div>
+          <div className="mb-4">
+            <label className="block text-gray-700">Password</label>
+            <input
+              className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring focus:ring-blue-200"
+              type="password"
               id="password"
               value={password}
-              variant="outlined"
-              margin="normal"
-              type="password"
               onChange={(e) => setPassword(e.target.value)}
             />
-          </Box>
-          <Box
-            sx={{
-              display: 'flex',
-              justifyContent: 'center',
-              alignItems: 'center',
-            }}
-          >
-            <Button
-              sx={{
-                backgroundColor: 'dodgerblue',
-                color: "white",
-                width: "18vw",
-                height: "6vh",
-                "&:hover": {
-                    bgcolor: "green",
-                },
-              }}
+          </div>
+          <div className="flex justify-center">
+            <button
+              className="bg-blue-500 text-white w-1/2 py-2 rounded hover:bg-green-500 transition duration-200"
               type="submit"
             >
               Submit
-            </Button>
-          </Box>
+            </button>
+          </div>
 
-          <Typography
-            sx={{
-              fontSize: '12px',
-              mt: '20px'
-            }}
-          >
-            Don't have an account? <Link to='/signup' style={{ textDecoration: 'none', color: 'blue', cursor: 'pointer' }}>Sign up</Link>
-          </Typography>
+          <p className="text-sm mt-4 text-center">
+            Don't have an account?{' '}
+            <Link to='/signup' className="text-blue-500 hover:underline">
+              Sign up
+            </Link>
+          </p>
         </form>
-      </Box>
-    </Container>
+      </div>
+    </div>
   );
 };
 

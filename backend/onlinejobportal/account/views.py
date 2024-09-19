@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate
 from account.renderers import UserRenderer
 from rest_framework_simplejwt.tokens import RefreshToken 
 from rest_framework.permissions import IsAuthenticated
-
+from .models import ProfileDescription
 
 # Generate Token Manually
 def get_token_for_user(user):
@@ -38,6 +38,7 @@ class UserLoginView(APIView):
             user = authenticate(email = email, password=password)
             if user is not None:
                 token = get_token_for_user(user)
+                request.session['email'] = email
                 return Response({'token': token, 'msg':'Login Success'}, status=status.HTTP_200_OK)
             else:
                 return Response({'errors': {'non_field_errors': ['Email or Password is not Valid']}}, status=status.HTTP_404_NOT_FOUND)
@@ -75,7 +76,17 @@ class ProfileDescriptionView(APIView):
 
     def post(self, request, format=None):
         serializer = ProfileDescriptionSerializer(data=request.data, context={'request': request})
-        if serializer.is_valid():
+        if serializer.is_valid(): 
             serializer.save()
             return Response({'msg': 'Profile Saved Successfully'}, status=status.HTTP_201_CREATED)
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+    
+    def get(self, request, pk=None, format=None):
+        if pk is not None:
+            try:
+                profile = ProfileDescription.objects.get(id=pk)
+                serializer = ProfileDescriptionSerializer(profile)
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except ProfileDescription.DoesNotExist:
+                return Response({'error': 'Profile description not found'}, status=status.HTTP_404_NOT_FOUND)
+        return Response({'error': 'No profile ID provided'}, status=status.HTTP_400_BAD_REQUEST)

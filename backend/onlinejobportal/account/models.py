@@ -100,6 +100,7 @@ class ProfileDescription(models.Model):
     phonenumber = models.TextField(blank=True, null=True)
     email = models.TextField(blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
+    address = models.TextField(blank=True, null=True)
     profile_picture = models.ImageField(upload_to='profile_pictures/', blank=True, null=True)
 
     def clean(self):

@@ -57,9 +57,11 @@ class TestSerializer(serializers.ModelSerializer):
 class ProfileDescriptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ProfileDescription
-        fields = ['description', 'phonenumber', 'email', 'bio', 'profile_picture']
+        fields = ['description', 'phonenumber', 'email', 'bio', 'address', 'profile_picture']
 
     def create(self, validated_data):
         user = self.context['request'].user
         profile_description = ProfileDescription.objects.create(user=user, **validated_data)
         return profile_description
+    
+    
