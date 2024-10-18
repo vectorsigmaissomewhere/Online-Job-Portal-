@@ -1,11 +1,14 @@
-﻿# Online-Job-Portal-
-
-A place where you can find a job
+﻿# Online-Job-Portal
 
 
 Development
 ```text
-Django, React js, mysql 
+Django, React js, mysql
+```
+
+Stating data
+```text
+oct 15
 ```
 
 
